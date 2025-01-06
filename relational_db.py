@@ -1,35 +1,39 @@
-class User:
-    def __init__(self, userpkID, password, phone_number, createdAt, is_deleted, deletedAt, updateAt):
-        self.userpkID = userpkID
+from datetime import datetime
+import uuid
+
+
+class BaseModel:
+    def __init__(self):
+        self.id = uuid.uuid4()
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        self.deleted_at = None
+        self.is_deleted = False
+
+
+class User(BaseModel):
+    def __init__(self, email: str, password: str, phone_number: str):
+        super().__init__()
+        self.email = email
         self.password = password
         self.phone_number = phone_number
-        self.createdAt = createdAt
-        self.is_deleted = False
-        self.deletedAt = None
-        self.updateAt = None
+        self.events = []
 
+    def __str__(self):
+        return f"id:{self.id}\nemail:{self.email}\npassword:{self.password}\nphone number:{self.phone_number}\n events:{self.events}"
 
-class Event:
-    def __init__(self, user, fkID, pkID, name, description, image, updateAt, date, deletedAt, status, is_deleted,
-                 createdAt):
+class Event(BaseModel):
+    def __init__(self, name: str, description: str, image: str, date: datetime, user: User, status: str):
+        super().__init__()
 
         self.user = user
-        self.pkID = pkID
         self.name = name
         self.description = description
         self.image = image
-        self.updateAt = None
         self.date = date
-        self.deleteAt = None
         self.status = status
-        self.is_deleted = False
-        self.createdAt = createdAt
-        self.fkID = fkID
-
-first_user = User(userpkID='198',password="bduw9", phone_number="+233 9872019101", createdAt="1/08/26",
-                  is_deleted=False, deletedAt=None, updateAt=None)
-first_event = Event(user=first_user, fkID=first_user.userpkID, pkID="0273", name='talent_show',
-                    description="showing off talents", image="image.png", updateAt=None, date="3/09/27",
-                    deletedAt=None, status="in_progress", is_deleted=False,createdAt=first_user.createdAt)
+        self.userID = user.id
 
 
+user = User('cacheonly@gmail.com', '980u8493hijfiuh89nwiojw', '+1278990133')
+print(user)
